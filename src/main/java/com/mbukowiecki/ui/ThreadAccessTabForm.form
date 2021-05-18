@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="com.mbukowiecki.ui.ThreadAccessTabForm">
+  <grid id="27dc6" binding="mainPanel" layout-manager="BorderLayout" hgap="0" vgap="0">
+    <constraints>
+      <xy x="20" y="20" width="500" height="400"/>
+    </constraints>
+    <properties/>
+    <border type="empty">
+      <size top="10" left="10" bottom="10" right="10"/>
+    </border>
+    <children>
+      <component id="dac02" class="javax.swing.JLabel" binding="threadNameLabel">
+        <constraints border-constraint="North"/>
+        <properties>
+          <text value="Thread access:"/>
+        </properties>
+      </component>
+      <component id="df3a" class="javax.swing.JList" binding="threadAccessList">
+        <constraints border-constraint="West"/>
+        <properties/>
+      </component>
+    </children>
+  </grid>
+</form>

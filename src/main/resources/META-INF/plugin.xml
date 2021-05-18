@@ -1,0 +1,31 @@
+<idea-plugin>
+    <id>io.intellij-sdk-thread-access</id>
+    <name>Thread Access Info</name>
+    <vendor email="m.bukowiecki0407@gmail.com" url="https://github.com/marcin-bukowiecki">Marcin Bukowiecki</vendor>
+
+    <description><![CDATA[
+        Simple plugin dedicated for Intellij plugin developers. Provides information about thread access during plugin debugging.
+
+        Shows information about:
+        <ul>
+            <li>Is write Thread</li>
+            <li>Is write access allowed</li>
+            <li>Is read access allowed</li>
+            <li>Is dispatch Thread</li>
+        </ul>
+    ]]></description>
+
+    <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.modules.all</depends>
+    <depends>com.intellij.java</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <postStartupActivity implementation="com.mbukowiecki.listener.ProjectOpened"/>
+        <!--
+        <registryKey defaultValue="true" description="Test" key="debugger.enable.breakpoints.during.evaluation"/>
+        -->
+    </extensions>
+
+    <actions>
+    </actions>
+</idea-plugin>
