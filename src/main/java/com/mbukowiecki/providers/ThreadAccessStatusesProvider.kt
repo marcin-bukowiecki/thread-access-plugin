@@ -92,8 +92,8 @@ fun checkIfIsPluginDebugging(context: SetupContext, nextCall: () -> Unit) {
                     context.caller.log.info("Not debugging plugin")
                 } else {
                     context.caller.log.info("Debugging plugin")
+                    context.caller.checked = true
                 }
-                context.caller.checked = true
                 nextCall.invoke()
             }
         }
