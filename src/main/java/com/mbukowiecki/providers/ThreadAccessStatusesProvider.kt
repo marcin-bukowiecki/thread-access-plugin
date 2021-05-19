@@ -21,7 +21,7 @@ import javax.swing.Icon
 /**
  * @author Marcin Bukowiecki
  */
-fun setupContext(caller: ThreadAccessDebugSessionListener, currentExecutionId: Int) {
+fun setupStatuses(caller: ThreadAccessDebugSessionListener, currentExecutionId: Int) {
     val model = caller.form.threadAccessList.model as? DefaultListModel<PresentationWrapper> ?: return
     val context = SetupContext(model, currentExecutionId, caller)
 
@@ -45,49 +45,55 @@ data class SetupContext(
     val model: DefaultListModel<PresentationWrapper>,
     val currentExecutionId: Int,
     val caller: ThreadAccessDebugSessionListener
-)
+) {
+
+    fun isValid(): Boolean = caller.executionRunId.get() == currentExecutionId
+}
 
 interface PresentationWrapper {
     val icon: Icon
     fun getPresentationText(): String
 }
 
-abstract class PresentationWrapperBase : PresentationWrapper {
+class PresentationWrapperImpl(
+    private val label: String,
+    private val status: String,
+    override val icon: Icon
+) : PresentationWrapper {
+
+    override fun getPresentationText(): String {
+        return "$label $status"
+    }
 
     override fun toString(): String {
         return getPresentationText()
     }
 }
 
-class BasePresentationWrapper(
-    private val label: String,
-    private val status: String,
-    override val icon: Icon
-) : PresentationWrapperBase() {
-
-    override fun getPresentationText(): String {
-        return "$label $status"
-    }
-}
-
 fun checkIfIsPluginDebugging(context: SetupContext, nextCall: () -> Unit) {
     if (context.caller.toIgnore) return
 
-    context.caller.log.info("Checking if plugin is starting...")
+    if (context.caller.checked) {
+        nextCall.invoke()
+        return
+    }
+
+    context.caller.log.info("Checking if debugging plugin...")
 
     getStatus(
         context,
         "ApplicationManager.getApplication().isInternal()",
         "com.intellij.openapi.application.ApplicationManager",
-        object : RenderCallback(context) {
+        object : CheckCallback(context) {
 
-            override fun renderStatus(value: Value?, status: String, icon: Icon) {
+            override fun run(value: Value?, status: String, icon: Icon) {
                 if (value == null || (value is BooleanValue && !value.value())) {
                     context.caller.toIgnore = true
                     context.caller.log.info("Not debugging plugin")
                 } else {
                     context.caller.log.info("Debugging plugin")
                 }
+                context.caller.checked = true
                 nextCall.invoke()
             }
         }
@@ -99,7 +105,7 @@ fun isWriteThread(context: SetupContext, nextCall: () -> Unit) {
         context,
         "ApplicationManager.getApplication().isWriteThread()",
         "com.intellij.openapi.application.ApplicationManager",
-        RenderCallback(context, ThreadAccessBundle.message("writeThread.label"), nextCall)
+        CheckCallback(context, ThreadAccessBundle.message("writeThread.label"), nextCall)
     )
 }
 
@@ -108,7 +114,7 @@ fun isWriteAccessAllowed(context: SetupContext, nextCall: () -> Unit) {
         context,
         "ApplicationManager.getApplication().isWriteAccessAllowed()",
         "com.intellij.openapi.application.ApplicationManager",
-        RenderCallback(context, ThreadAccessBundle.message("writeAccessAllowed.label"), nextCall)
+        CheckCallback(context, ThreadAccessBundle.message("writeAccessAllowed.label"), nextCall)
     )
 }
 
@@ -117,7 +123,7 @@ fun isReadAccessAllowed(context: SetupContext, nextCall: () -> Unit) {
         context,
         "ApplicationManager.getApplication().isReadAccessAllowed()",
         "com.intellij.openapi.application.ApplicationManager",
-        RenderCallback(context, ThreadAccessBundle.message("readAccessAllowed.label"), nextCall)
+        CheckCallback(context, ThreadAccessBundle.message("readAccessAllowed.label"), nextCall)
     )
 }
 
@@ -126,7 +132,7 @@ fun isDispatchThread(context: SetupContext, nextCall: () -> Unit) {
         context,
         "ApplicationManager.getApplication().isDispatchThread()",
         "com.intellij.openapi.application.ApplicationManager",
-        RenderCallback(context, ThreadAccessBundle.message("dispatchThread.label"), nextCall)
+        CheckCallback(context, ThreadAccessBundle.message("dispatchThread.label"), nextCall)
     )
 }
 
@@ -135,11 +141,11 @@ fun isManagerThread(context: SetupContext, nextCall: () -> Unit) {
         context,
         "DebuggerManagerThreadImpl.isManagerThread()",
         "com.intellij.debugger.engine.DebuggerManagerThreadImpl",
-        RenderCallback(context, ThreadAccessBundle.message("managerThread.label"), nextCall)
+        CheckCallback(context, ThreadAccessBundle.message("managerThread.label"), nextCall)
     )
 }
 
-open class RenderCallback(
+open class CheckCallback(
     private val context: SetupContext,
     private val label: String,
     private val nextCall: () -> Unit
@@ -147,9 +153,9 @@ open class RenderCallback(
 
     constructor(context: SetupContext): this(context, "", {})
 
-    open fun renderStatus(value: Value?, status: String, icon: Icon) {
-        if (context.caller.executionRunId.get() == context.currentExecutionId) {
-            context.model.addElement(BasePresentationWrapper(label, status, icon))
+    open fun run(value: Value?, status: String, icon: Icon) {
+        if (context.isValid()) {
+            context.model.addElement(PresentationWrapperImpl(label, status, icon))
         }
         nextCall.invoke()
     }
@@ -159,7 +165,7 @@ private fun getStatus(
     context: SetupContext,
     expression: String,
     customInfo: String,
-    renderCallback: RenderCallback
+    checkCallback: CheckCallback
 ) {
     if (context.caller.toIgnore) return
 
@@ -167,7 +173,7 @@ private fun getStatus(
     context.caller.debugProcess.evaluator?.evaluate(expr, object : XDebuggerEvaluator.XEvaluationCallback {
 
         override fun errorOccurred(errorMessage: String) {
-            renderCallback.renderStatus(
+            checkCallback.run(
                 null,
                 errorMessage,
                 AllIcons.General.InspectionsWarning
@@ -178,23 +184,23 @@ private fun getStatus(
             (result as? JavaValue).let {
                 val evaluateException = it?.descriptor?.evaluateException
                 if (evaluateException != null) {
-                    renderCallback.renderStatus(
+                    checkCallback.run(
                         null,
-                        evaluateException.message ?: "Exception while obtaining access",
+                        evaluateException.message ?: ThreadAccessBundle.message("thread.access.exception"),
                         AllIcons.General.InspectionsWarning
                     )
                 } else {
                     it?.descriptor?.value.let { value ->
                         if (value is BooleanValue) {
-                            renderCallback.renderStatus(
+                            checkCallback.run(
                                 value,
                                 getBooleanPresentation(value.value()),
                                 getBooleanIcon(value.value())
                             )
                         } else {
-                            renderCallback.renderStatus(
+                            checkCallback.run(
                                 null,
-                                "Unknown access",
+                                ThreadAccessBundle.message("thread.access.unknown"),
                                 AllIcons.General.InspectionsWarning
                             )
                         }

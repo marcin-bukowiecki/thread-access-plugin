@@ -23,8 +23,4 @@ object ThreadAccessBundle : DynamicBundle(BUNDLE) {
     fun message(@PropertyKey(resourceBundle = BUNDLE) key: String, arg1: Any): @Nls String {
         return getMessage(key, arg1)
     }
-
-    fun message(@PropertyKey(resourceBundle = BUNDLE) key: String, arg1: Any, arg2: Any): @Nls String {
-        return getMessage(key, arg1, arg2)
-    }
 }

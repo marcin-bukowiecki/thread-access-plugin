@@ -5,7 +5,7 @@
 
     <description><![CDATA[
         Debugging plugins extended with Thread access information according to Intellij Platform SDK threading rules.
-        <br><br>
+        <br>
         Shows information about:
         <ul>
             <li>Is write Thread</li>
@@ -13,6 +13,7 @@
             <li>Is read access allowed</li>
             <li>Is dispatch Thread</li>
         </ul>
+        <br>
         More details: <a href="https://plugins.jetbrains.com/docs/intellij/general-threading-rules.html?from=jetbrains.org#read-write-lock">Threading Rules</a>
 
         <h4>Usage</h4>

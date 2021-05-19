@@ -5,6 +5,7 @@
 
 package com.mbukowiecki.ui
 
+import com.intellij.icons.AllIcons
 import com.intellij.util.ui.JBFont
 import com.mbukowiecki.providers.PresentationWrapper
 import javax.swing.DefaultListModel
@@ -17,6 +18,7 @@ import javax.swing.border.EmptyBorder
  * @author Marcin Bukowiecki
  */
 class ThreadAccessTabForm {
+
     lateinit var mainPanel: JPanel
     lateinit var threadAccessList: JList<PresentationWrapper>
     lateinit var threadNameLabel: JLabel
@@ -26,6 +28,7 @@ class ThreadAccessTabForm {
         threadAccessList.model = DefaultListModel()
         threadAccessList.cellRenderer = ThreadAccessCell()
 
+        threadNameLabel.icon = AllIcons.Debugger.Threads
         threadNameLabel.font = JBFont.label()
         threadNameLabel.border = EmptyBorder(10, 10, 10, 10)
     }
