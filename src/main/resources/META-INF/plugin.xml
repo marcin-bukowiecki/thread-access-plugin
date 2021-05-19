@@ -4,8 +4,8 @@
     <vendor email="m.bukowiecki0407@gmail.com" url="https://github.com/marcin-bukowiecki">Marcin Bukowiecki</vendor>
 
     <description><![CDATA[
-        Simple plugin dedicated for Intellij plugin developers. Provides information about thread access during plugin debugging.
-
+        Debugging plugins extended with Thread access information according to Intellij Platform SDK threading rules.
+        <br><br>
         Shows information about:
         <ul>
             <li>Is write Thread</li>
@@ -13,6 +13,12 @@
             <li>Is read access allowed</li>
             <li>Is dispatch Thread</li>
         </ul>
+        More details: <a href="https://plugins.jetbrains.com/docs/intellij/general-threading-rules.html?from=jetbrains.org#read-write-lock">Threading Rules</a>
+
+        <h4>Usage</h4>
+
+        There is zero configuration. Just launch developing plugin in debug mode and see <code>Thread Access</code> tab
+        next to existing Debug process tabs: <code>Console</code>, <code>Threads</code> etc.
     ]]></description>
 
     <depends>com.intellij.modules.platform</depends>
