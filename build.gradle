@@ -24,6 +24,12 @@ intellij {
     plugins 'java'
 }
 
+patchPluginXml {
+    changeNotes """
+      <br>
+      Added support to hide/show Thread Access tab from Layout Settings"""
+}
+
 test {
     useJUnitPlatform()
 }

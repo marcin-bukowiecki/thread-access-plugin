@@ -15,4 +15,4 @@ debugging Intellij plugin and provide proper thread access information.
 
 ## Installation
 
-You can install this plugin from JetBrains plugin repository.
+You can install this plugin from JetBrains plugin repository: [link](https://plugins.jetbrains.com/plugin/16815-thread-access-info)
