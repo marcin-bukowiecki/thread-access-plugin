@@ -27,6 +27,8 @@ intellij {
 patchPluginXml {
     changeNotes """
       <br>
+      Fixed bug with not loading tab
+      <br>
       Added support to hide/show Thread Access tab from Layout Settings"""
 }
 
