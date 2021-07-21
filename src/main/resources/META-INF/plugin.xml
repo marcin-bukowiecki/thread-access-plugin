@@ -31,6 +31,8 @@
         <!--
         <registryKey defaultValue="true" description="Test" key="debugger.enable.breakpoints.during.evaluation"/>
         -->
+        <applicationService serviceImplementation="com.mbukowiecki.providers.ThreadAccessStatusesProvider"/>
+        <applicationService serviceImplementation="com.mbukowiecki.evaluator.ThreadAccessEvaluator"/>
     </extensions>
 
     <actions>

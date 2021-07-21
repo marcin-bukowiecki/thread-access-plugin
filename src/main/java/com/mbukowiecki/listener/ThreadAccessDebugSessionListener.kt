@@ -6,13 +6,12 @@
 package com.mbukowiecki.listener
 
 import com.intellij.debugger.engine.SuspendContextImpl
-import com.intellij.execution.ui.layout.PlaceInGrid
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.xdebugger.XDebugProcess
 import com.intellij.xdebugger.XDebugSessionListener
 import com.mbukowiecki.bundle.ThreadAccessBundle
-import com.mbukowiecki.providers.setupStatuses
+import com.mbukowiecki.providers.ThreadAccessStatusesProvider
 import com.mbukowiecki.ui.ThreadAccessTabForm
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -25,6 +24,8 @@ class ThreadAccessDebugSessionListener(
 ) : XDebugSessionListener {
 
     val log = Logger.getInstance(ThreadAccessDebugSessionListener::class.java)
+
+    val project = debugProcess.session.project
 
     @Volatile
     private var tabAdded = false
@@ -75,7 +76,7 @@ class ThreadAccessDebugSessionListener(
         val currentExecutionId = executionRunId.incrementAndGet()
 
         (debugProcess.session.suspendContext as? SuspendContextImpl)?.let { ctx ->
-            setupStatuses(this, currentExecutionId)
+            ThreadAccessStatusesProvider.getInstance().setupStatuses(this, currentExecutionId)
             setupThreadName(ctx, currentExecutionId)
         }
     }

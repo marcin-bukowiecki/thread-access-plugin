@@ -5,7 +5,7 @@ plugins {
 }
 
 group 'com.mbukowiecki'
-version '1.0.3'
+version '1.0.5'
 
 repositories {
     mavenCentral()
@@ -25,11 +25,7 @@ intellij {
 }
 
 patchPluginXml {
-    changeNotes """
-      <br>
-      Fixed bug with not loading tab
-      <br>
-      Added support to hide/show Thread Access tab from Layout Settings"""
+    changeNotes(project.file('change-notes.html').text)
 }
 
 test {
