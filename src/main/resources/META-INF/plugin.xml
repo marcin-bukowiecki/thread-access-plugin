@@ -12,6 +12,9 @@
             <li>Is write access allowed</li>
             <li>Is read access allowed</li>
             <li>Is dispatch Thread</li>
+            <li>Is disposed (in Java source code)</li>
+            <li>Is in impatient reader</li>
+            <li>Holds read lock</li>
         </ul>
         <br>
         More details: <a href="https://plugins.jetbrains.com/docs/intellij/general-threading-rules.html?from=jetbrains.org#read-write-lock">Threading Rules</a>

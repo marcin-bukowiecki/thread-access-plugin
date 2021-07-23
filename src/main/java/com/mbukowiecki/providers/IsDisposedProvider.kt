@@ -6,6 +6,7 @@
 package com.mbukowiecki.providers
 
 import com.intellij.lang.jvm.JvmModifier
+import com.intellij.openapi.application.ApplicationManager
 import com.intellij.xdebugger.evaluation.EvaluationMode
 import com.mbukowiecki.bundle.ThreadAccessBundle
 import com.mbukowiecki.evaluator.ThreadAccessEvaluator
@@ -26,7 +27,8 @@ class IsDisposedProvider : AccessProvider {
             return
         }
         ThreadAccessUtils.getMethod(context.caller.project, currentPosition)?.let {
-            if (it.hasModifier(JvmModifier.STATIC)) {
+            val hasModifier = ApplicationManager.getApplication().runReadAction<Boolean, Throwable> { it.hasModifier(JvmModifier.STATIC) }
+            if (hasModifier) {
                 context.nextCallProvider.getNextCall().provide(context)
             } else {
                 ThreadAccessEvaluator.getInstance().getStatus(

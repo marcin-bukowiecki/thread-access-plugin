@@ -8,7 +8,6 @@ package com.mbukowiecki.providers
 import com.intellij.icons.AllIcons
 import com.mbukowiecki.bundle.ThreadAccessBundle
 import com.mbukowiecki.evaluator.ThreadAccessEvaluator
-import com.sun.jdi.BooleanValue
 import com.sun.jdi.Value
 import javax.swing.Icon
 
