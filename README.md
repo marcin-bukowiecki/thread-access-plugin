@@ -8,6 +8,9 @@ Shows information about:
     <li>Is write access allowed</li>
     <li>Is read access allowed</li>
     <li>Is dispatch Thread</li>
+    <li>Is disposed (in Java source code)</li>
+    <li>Is in impatient reader</li>
+    <li>Holds read lock</li>
 </ul>
 
 There is no configuration. Plugin will try to detect if a process is 
