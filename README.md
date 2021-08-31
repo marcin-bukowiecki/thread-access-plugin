@@ -1,3 +1,5 @@
+![Downloads](https://img.shields.io/jetbrains/plugin/d/io.intellij-sdk-thread-access) ![Rating](https://img.shields.io/jetbrains/plugin/r/rating/io.intellij-sdk-thread-access)
+
 # Thread Access plugin
 
 Simple plugin dedicated for Intellij plugin developers. Provides information about thread access during plugin debugging.
