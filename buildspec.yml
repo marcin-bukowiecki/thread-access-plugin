@@ -4,8 +4,6 @@ phases:
   install:
     commands:
       - echo building Thread Access Info...
-      - yum update -y
-      - gradle -version
     on-failure: ABORT
   pre_build:
     commands:
