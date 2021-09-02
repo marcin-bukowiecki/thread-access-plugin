@@ -4,6 +4,10 @@ phases:
   install:
     commands:
       - echo building Thread Access Info...
+      - wget https://services.gradle.org/distributions/gradle-7.1.1-bin.zip
+      - unzip -d /opt/gradle gradle-7.1.1-bin.zip
+      - export PATH=$PATH:/opt/gradle/gradle-7.1.1/bin
+      - gradle -version
     on-failure: ABORT
   pre_build:
     commands:
