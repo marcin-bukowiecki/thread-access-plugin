@@ -1,0 +1,24 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - echo building Thread Access Info...
+    on-failure: ABORT
+  pre_build:
+    commands:
+      - echo build startet at `date`
+    on-failure: ABORT
+  build:
+    commands:
+      - gradle build
+      - gradle test
+    on-failure: ABORT
+  post_build:
+    commands:
+      - echo finished at `date`
+    on-failure: ABORT
+
+artifacts:
+  files:
+    - build/distributions/thread-access-plugin-${PLUGIN_VERSION}.jar
