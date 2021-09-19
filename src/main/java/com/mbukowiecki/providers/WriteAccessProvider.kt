@@ -20,7 +20,7 @@ class WriteAccessProvider : AccessProvider {
             "com.intellij.openapi.application.ApplicationManager",
             CheckCallback(
                 context,
-                ThreadAccessBundle.message("writeAccessAllowed.label")
+                ThreadAccessBundle.message("threadAccessInfo.writeAccessAllowed.label")
             )
         )
     }

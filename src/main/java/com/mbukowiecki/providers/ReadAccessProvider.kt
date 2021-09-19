@@ -20,7 +20,7 @@ class ReadAccessProvider : AccessProvider {
             "com.intellij.openapi.application.ApplicationManager",
             CheckCallback(
                 context,
-                ThreadAccessBundle.message("readAccessAllowed.label")
+                ThreadAccessBundle.message("threadAccessInfo.readAccessAllowed.label")
             )
         )
     }

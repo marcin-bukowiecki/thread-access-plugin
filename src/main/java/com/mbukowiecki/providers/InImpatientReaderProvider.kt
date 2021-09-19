@@ -20,7 +20,8 @@ class InImpatientReaderProvider : AccessProvider {
             "com.intellij.openapi.application.ApplicationManager",
             CheckCallback(
                 context,
-                ThreadAccessBundle.message("isInImpatientReader.label")
+                ThreadAccessBundle.message("threadAccessInfo.isInImpatientReader.label"),
+                presentationColumn = 1
             )
         )
     }

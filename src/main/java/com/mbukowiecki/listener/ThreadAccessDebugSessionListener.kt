@@ -12,7 +12,7 @@ import com.intellij.xdebugger.XDebugProcess
 import com.intellij.xdebugger.XDebugSessionListener
 import com.mbukowiecki.bundle.ThreadAccessBundle
 import com.mbukowiecki.providers.ThreadAccessStatusesProvider
-import com.mbukowiecki.ui.ThreadAccessTabForm
+import com.mbukowiecki.ui.ThreadAccessInfoTab
 import java.util.concurrent.atomic.AtomicInteger
 
 /**
@@ -20,7 +20,7 @@ import java.util.concurrent.atomic.AtomicInteger
  */
 class ThreadAccessDebugSessionListener(
     val debugProcess: XDebugProcess,
-    val form: ThreadAccessTabForm
+    val tab: ThreadAccessInfoTab
 ) : XDebugSessionListener {
 
     val log = Logger.getInstance(ThreadAccessDebugSessionListener::class.java)
@@ -57,9 +57,9 @@ class ThreadAccessDebugSessionListener(
             ApplicationManager.getApplication().invokeLater {
                 val myUi = debugProcess.session?.ui ?: return@invokeLater
                 val content = myUi.createContent(
-                    ThreadAccessBundle.message("thread.debugger.tab.id"),
-                    form.mainPanel,
-                    ThreadAccessBundle.message("thread.debugger.tab.name"),
+                    ThreadAccessBundle.message("threadAccessInfo.debugger.tab.id"),
+                    tab.mainPanel,
+                    ThreadAccessBundle.message("threadAccessInfo.debugger.tab.name"),
                     null,
                     null
                 )
@@ -84,10 +84,10 @@ class ThreadAccessDebugSessionListener(
     private fun setupThreadName(ctx: SuspendContextImpl, currentExecutionId: Int) {
         val currentThread = ctx.thread
         val threadName = if (currentThread == null) {
-            ThreadAccessBundle.message("thread.name.unknown")
+            ThreadAccessBundle.message("threadAccessInfo.thread.name.unknown")
         } else {
-            currentThread.name() ?: ThreadAccessBundle.message("thread.name.unknown")
+            currentThread.name() ?: ThreadAccessBundle.message("threadAccessInfo.thread.name.unknown")
         }
-        if (currentExecutionId == executionRunId.get()) form.threadNameLabel.text = ThreadAccessBundle.message("thread.name", threadName)
+        if (currentExecutionId == executionRunId.get()) tab.threadNameLabel.text = ThreadAccessBundle.message("threadAccessInfo.thread.name", threadName)
     }
 }
