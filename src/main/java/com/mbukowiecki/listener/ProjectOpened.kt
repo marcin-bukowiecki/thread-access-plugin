@@ -12,7 +12,7 @@ import com.intellij.openapi.util.Disposer
 import com.intellij.xdebugger.XDebugProcess
 import com.intellij.xdebugger.XDebuggerManager
 import com.intellij.xdebugger.XDebuggerManagerListener
-import com.mbukowiecki.ui.ThreadAccessTabForm
+import com.mbukowiecki.ui.ThreadAccessInfoTab
 
 /**
  * @author Marcin Bukowiecki
@@ -27,7 +27,7 @@ class ProjectOpened : StartupActivity {
             debugProcess.session.addSessionListener(
                 ThreadAccessDebugSessionListener(
                     debugProcess,
-                    ThreadAccessTabForm()
+                    ThreadAccessInfoTab()
                 )
             )
         }
@@ -42,7 +42,7 @@ class ProjectOpened : StartupActivity {
                     debugProcess.session.addSessionListener(
                         ThreadAccessDebugSessionListener(
                             debugProcess,
-                            ThreadAccessTabForm()
+                            ThreadAccessInfoTab()
                         )
                     )
                 }

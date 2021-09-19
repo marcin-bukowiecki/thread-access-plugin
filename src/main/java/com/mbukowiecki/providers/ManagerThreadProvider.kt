@@ -21,7 +21,7 @@ class ManagerThreadProvider : AccessProvider {
             "com.intellij.debugger.engine.DebuggerManagerThreadImpl",
             CheckCallback(
                 context,
-                ThreadAccessBundle.message("managerThread.label")
+                ThreadAccessBundle.message("threadAccessInfo.managerThread.label")
             )
         )
     }

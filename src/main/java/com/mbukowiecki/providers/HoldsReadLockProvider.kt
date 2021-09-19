@@ -23,7 +23,7 @@ class HoldsReadLockProvider : AccessProvider {
             "com.intellij.openapi.application.ApplicationManager",
             HoldsReadLockCallback(
                 context,
-                ThreadAccessBundle.message("holdsReadLock.label")
+                ThreadAccessBundle.message("threadAccessInfo.holdsReadLock.label")
             )
         )
     }
@@ -33,19 +33,20 @@ class HoldsReadLockProvider : AccessProvider {
  * @author Marcin Bukowiecki
  */
 class HoldsReadLockCallback(context: SetupContext,
-                            label: String) : CheckCallback(context, label) {
+                            label: String) : CheckCallback(context, label, presentationColumn = 1) {
 
     override fun run(value: Value?, status: String, icon: Icon, errorOccurred: Boolean) {
         if (context.isValid()) {
             if (errorOccurred) {
                 context.model.addElement(
+                    this,
                     PresentationWrapperImpl(
                         label,
-                        ThreadAccessBundle.message("no"),
+                        ThreadAccessBundle.message("threadAccessInfo.no"),
                         AllIcons.General.Error
                     ))
             } else {
-                context.model.addElement(PresentationWrapperImpl(label, status, icon))
+                context.model.addElement(this, PresentationWrapperImpl(label, status, icon))
             }
         }
         context.nextCallProvider.getNextCall().provide(context)

@@ -20,7 +20,7 @@ class DispatchThreadProvider : AccessProvider {
             "com.intellij.openapi.application.ApplicationManager",
             CheckCallback(
                 context,
-                ThreadAccessBundle.message("dispatchThread.label")
+                ThreadAccessBundle.message("threadAccessInfo.dispatchThread.label")
             )
         )
     }

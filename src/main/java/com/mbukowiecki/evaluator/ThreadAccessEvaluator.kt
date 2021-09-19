@@ -52,7 +52,7 @@ class ThreadAccessEvaluator {
                     if (evaluateException != null) {
                         checkCallback.run(
                             null,
-                            evaluateException.message ?: ThreadAccessBundle.message("thread.access.exception"),
+                            evaluateException.message ?: ThreadAccessBundle.message("threadAccessInfo.access.exception"),
                             AllIcons.General.InspectionsWarning,
                             true
                         )
@@ -67,7 +67,7 @@ class ThreadAccessEvaluator {
                             } else {
                                 checkCallback.run(
                                     null,
-                                    ThreadAccessBundle.message("thread.access.unknown"),
+                                    ThreadAccessBundle.message("threadAccessInfo.access.unknown"),
                                     AllIcons.General.InspectionsWarning
                                 )
                             }
@@ -81,9 +81,9 @@ class ThreadAccessEvaluator {
 
     private fun getBooleanPresentation(value: Boolean): String {
         return if (value) {
-            ThreadAccessBundle.message("yes")
+            ThreadAccessBundle.message("threadAccessInfo.yes")
         } else {
-            ThreadAccessBundle.message("no")
+            ThreadAccessBundle.message("threadAccessInfo.no")
         }
     }
 

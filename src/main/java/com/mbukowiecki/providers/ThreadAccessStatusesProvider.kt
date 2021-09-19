@@ -5,12 +5,12 @@
 
 package com.mbukowiecki.providers
 
-import com.intellij.openapi.components.ServiceManager
+import com.intellij.openapi.application.ApplicationManager
 import com.mbukowiecki.evaluator.ThreadAccessEvaluator
 import com.mbukowiecki.listener.ThreadAccessDebugSessionListener
+import com.mbukowiecki.ui.ThreadStatusModel
 import com.sun.jdi.BooleanValue
 import com.sun.jdi.Value
-import javax.swing.DefaultListModel
 import javax.swing.Icon
 
 /**
@@ -29,14 +29,13 @@ class ThreadAccessStatusesProvider {
     )
 
     fun setupStatuses(caller: ThreadAccessDebugSessionListener, currentExecutionId: Int) {
-        val model = caller.form.threadAccessList.model as? DefaultListModel<PresentationWrapper> ?: return
+        val model = caller.tab.threadStatusModel
         val nextCallProvider = NextCallProvider(accessProviders)
         val context = SetupContext(model, currentExecutionId, caller, nextCallProvider)
 
         checkIfIsPluginDebugging(context) {
             model.clear()
             context.caller.checkTab()
-
             nextCallProvider.getNextCall().provide(context)
         }
     }
@@ -44,7 +43,7 @@ class ThreadAccessStatusesProvider {
     companion object {
 
         fun getInstance(): ThreadAccessStatusesProvider {
-            return ServiceManager.getService(ThreadAccessStatusesProvider::class.java)
+            return ApplicationManager.getApplication().getService(ThreadAccessStatusesProvider::class.java)
         }
     }
 }
@@ -53,7 +52,7 @@ class ThreadAccessStatusesProvider {
  * @author Marcin Bukowiecki
  */
 data class SetupContext(
-    val model: DefaultListModel<PresentationWrapper>,
+    val model: ThreadStatusModel,
     val currentExecutionId: Int,
     val caller: ThreadAccessDebugSessionListener,
     val nextCallProvider: NextCallProvider
@@ -126,14 +125,15 @@ fun checkIfIsPluginDebugging(context: SetupContext, nextCall: () -> Unit) {
  */
 open class CheckCallback(
     protected val context: SetupContext,
-    protected val label: String
+    protected val label: String,
+    val presentationColumn: Int = 0
 ) {
 
     constructor(context: SetupContext): this(context, "")
 
     open fun run(value: Value?, status: String, icon: Icon, errorOccurred: Boolean = false) {
         if (context.isValid()) {
-            context.model.addElement(PresentationWrapperImpl(label, status, icon))
+            context.model.addElement(this, PresentationWrapperImpl(label, status, icon))
         }
         context.nextCallProvider.getNextCall().provide(context)
     }

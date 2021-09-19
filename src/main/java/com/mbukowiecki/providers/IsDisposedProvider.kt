@@ -11,7 +11,6 @@ import com.intellij.xdebugger.evaluation.EvaluationMode
 import com.mbukowiecki.bundle.ThreadAccessBundle
 import com.mbukowiecki.evaluator.ThreadAccessEvaluator
 import com.mbukowiecki.utils.ThreadAccessUtils
-import com.sun.jdi.BooleanValue
 import com.sun.jdi.Value
 import javax.swing.Icon
 
@@ -35,7 +34,7 @@ class IsDisposedProvider : AccessProvider {
                     context,
                     "if (this instanceof Disposable) { return Disposer.isDisposed(this); } else { return false; }",
                     "com.intellij.openapi.util.Disposer,com.intellij.openapi.Disposable",
-                    IsDisposedCheckCallback(context, ThreadAccessBundle.message("isDisposed.label")),
+                    IsDisposedCheckCallback(context, ThreadAccessBundle.message("threadAccessInfo.isDisposed.label")),
                     evaluationMode = EvaluationMode.CODE_FRAGMENT
                 )
             }
@@ -49,11 +48,11 @@ class IsDisposedProvider : AccessProvider {
  * @author Marcin Bukowiecki
  */
 class IsDisposedCheckCallback(context: SetupContext,
-                              label: String) : CheckCallback(context, label) {
+                              label: String) : CheckCallback(context, label, presentationColumn = 1) {
 
     override fun run(value: Value?, status: String, icon: Icon, errorOccurred: Boolean) {
         if (context.isValid()) {
-            context.model.addElement(PresentationWrapperImpl(label, status, icon))
+            context.model.addElement(this, PresentationWrapperImpl(label, status, icon))
         }
         context.nextCallProvider.getNextCall().provide(context)
     }
