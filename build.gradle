@@ -5,7 +5,7 @@ plugins {
 }
 
 group 'com.mbukowiecki'
-version '1.2.1'
+version '1.3'
 
 repositories {
     mavenCentral()
@@ -18,7 +18,7 @@ dependencies {
 }
 
 intellij {
-    version '2021.2.2'
+    version '2021.3'
     type 'IC'
     plugins 'java'
 }
