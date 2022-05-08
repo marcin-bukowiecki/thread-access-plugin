@@ -5,6 +5,8 @@
 
 package com.mbukowiecki.providers
 
+import com.intellij.debugger.engine.SuspendContextImpl
+import com.intellij.debugger.engine.evaluation.EvaluateException
 import com.intellij.openapi.application.ApplicationManager
 import com.mbukowiecki.evaluator.ThreadAccessEvaluator
 import com.mbukowiecki.listener.ThreadAccessDebugSessionListener
@@ -100,10 +102,29 @@ fun checkIfIsPluginDebugging(context: SetupContext, nextCall: () -> Unit) {
 
     context.caller.log.info("Checking if debugging plugin...")
 
+    val intellijClassMarkerName = "com.intellij.openapi.application.ApplicationManager"
+    val xDebugProcess = context.caller.debugProcess
+    (xDebugProcess.session.suspendContext as? SuspendContextImpl)?.debugProcess?.let { debugProcess -> // Get the "real" debug process
+        debugProcess.debuggerContext.createEvaluationContext().let { evalContext -> // Can be null, in that case the class most likely won't be found
+            try {
+                val appManagerClassInProcess = debugProcess.findClass(evalContext, intellijClassMarkerName, evalContext?.classLoader)
+                if (appManagerClassInProcess == null) {
+                    context.caller.toIgnore = true
+                    context.caller.log.info("Not debugging plugin")
+                } else {
+                    context.caller.log.info("Debugging plugin")
+                    context.caller.checked = true
+                }
+                nextCall.invoke()
+                return
+            } catch (_: EvaluateException) {}
+        }
+    }
+
     ThreadAccessEvaluator.getInstance().getStatus(
         context,
         "ApplicationManager.getApplication().isInternal()",
-        "com.intellij.openapi.application.ApplicationManager",
+        intellijClassMarkerName,
         object : CheckCallback(context) {
 
             override fun run(value: Value?, status: String, icon: Icon, errorOccurred: Boolean) {
