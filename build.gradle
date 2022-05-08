@@ -25,6 +25,12 @@ intellij {
 
 patchPluginXml {
     changeNotes = project.file('change-notes.html').text
+    // https://plugins.jetbrains.com/docs/intellij/gradle-guide.html#patching-the-plugin-configuration-file
+    sinceBuild "202.6397.94"
+}
+
+runPluginVerifier {
+    ideVersions("IC-2022.1")
 }
 
 test {
