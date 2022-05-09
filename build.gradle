@@ -1,6 +1,6 @@
 plugins {
     id 'java'
-    id 'org.jetbrains.intellij' version '0.7.3'
+    id 'org.jetbrains.intellij' version '1.5.3'
     id 'org.jetbrains.kotlin.jvm' version '1.5.21'
 }
 
@@ -18,13 +18,13 @@ dependencies {
 }
 
 intellij {
-    version '2022.1'
-    type 'IC'
-    plugins 'java'
+    version = '2022.1'
+    type = 'IC'
+    plugins = ['java']
 }
 
 patchPluginXml {
-    changeNotes project.file('change-notes.html').text
+    changeNotes = project.file('change-notes.html').text
 }
 
 test {
