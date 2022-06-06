@@ -89,6 +89,8 @@ class PresentationWrapperImpl(
     }
 }
 
+private const val intellijClassMarkerName = "com.intellij.openapi.application.ApplicationManager"
+
 /**
  * @author Marcin Bukowiecki
  */
@@ -101,8 +103,14 @@ fun checkIfIsPluginDebugging(context: SetupContext, nextCall: () -> Unit) {
     }
 
     context.caller.log.info("Checking if debugging plugin...")
+    if (tryCheckWithFindingClass(context, nextCall)) {
+        return
+    }
 
-    val intellijClassMarkerName = "com.intellij.openapi.application.ApplicationManager"
+    tryCheckWithEvaluator(context, nextCall)
+}
+
+private fun tryCheckWithFindingClass(context: SetupContext, nextCall: () -> Unit): Boolean {
     val xDebugProcess = context.caller.debugProcess
     (xDebugProcess.session.suspendContext as? SuspendContextImpl)?.debugProcess?.let { debugProcess -> // Get the "real" debug process
         debugProcess.debuggerContext.createEvaluationContext().let { evalContext -> // Can be null, in that case the class most likely won't be found
@@ -116,11 +124,14 @@ fun checkIfIsPluginDebugging(context: SetupContext, nextCall: () -> Unit) {
                     context.caller.checked = true
                 }
                 nextCall.invoke()
-                return
+                return true
             } catch (_: EvaluateException) {}
         }
     }
+    return false
+}
 
+private fun tryCheckWithEvaluator(context: SetupContext, nextCall: () -> Unit) {
     ThreadAccessEvaluator.getInstance().getStatus(
         context,
         "ApplicationManager.getApplication().isInternal()",
