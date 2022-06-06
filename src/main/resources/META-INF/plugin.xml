@@ -2,6 +2,8 @@
     <id>io.intellij-sdk-thread-access</id>
     <name>Thread Access Info</name>
     <vendor email="m.bukowiecki0407@gmail.com" url="https://github.com/marcin-bukowiecki">Marcin Bukowiecki</vendor>
+    
+    <idea-version since-build="202.6397.94"/>
 
     <description><![CDATA[
         Debugging plugins extended with Thread access information according to Intellij Platform SDK threading rules.

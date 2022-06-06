@@ -5,7 +5,7 @@ plugins {
 }
 
 group 'com.mbukowiecki'
-version '2.0'
+version '2.1'
 
 repositories {
     mavenCentral()
@@ -21,10 +21,15 @@ intellij {
     version = '2022.1'
     type = 'IC'
     plugins = ['java']
+    updateSinceUntilBuild = false
 }
 
 patchPluginXml {
     changeNotes = project.file('change-notes.html').text
+}
+
+runPluginVerifier {
+    ideVersions = ["IC-2022.1"]
 }
 
 test {

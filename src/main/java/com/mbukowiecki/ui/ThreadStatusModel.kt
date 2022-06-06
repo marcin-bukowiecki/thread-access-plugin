@@ -5,6 +5,7 @@
 
 package com.mbukowiecki.ui
 
+import com.intellij.ui.components.JBList
 import com.intellij.util.ui.JBFont
 import com.mbukowiecki.providers.CheckCallback
 import com.mbukowiecki.providers.PresentationWrapper
@@ -16,8 +17,8 @@ import javax.swing.JList
  */
 class ThreadStatusModel {
 
-    val firstList = JList<PresentationWrapper>(DefaultListModel())
-    val secondList = JList<PresentationWrapper>(DefaultListModel())
+    val firstList = JBList<PresentationWrapper>(DefaultListModel())
+    val secondList = JBList<PresentationWrapper>(DefaultListModel())
 
     init {
         firstList.font = JBFont.label()

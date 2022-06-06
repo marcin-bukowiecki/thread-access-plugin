@@ -8,7 +8,7 @@ package com.mbukowiecki.evaluator
 import com.intellij.debugger.engine.JavaValue
 import com.intellij.icons.AllIcons
 import com.intellij.lang.java.JavaLanguage
-import com.intellij.openapi.components.ServiceManager
+import com.intellij.openapi.application.ApplicationManager
 import com.intellij.xdebugger.evaluation.EvaluationMode
 import com.intellij.xdebugger.evaluation.XDebuggerEvaluator
 import com.intellij.xdebugger.frame.XValue
@@ -98,7 +98,7 @@ class ThreadAccessEvaluator {
     companion object {
 
         fun getInstance(): ThreadAccessEvaluator {
-            return ServiceManager.getService(ThreadAccessEvaluator::class.java)
+            return ApplicationManager.getApplication().getService(ThreadAccessEvaluator::class.java)
         }
     }
 }
