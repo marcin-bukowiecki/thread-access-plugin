@@ -3,7 +3,7 @@
     <name>Thread Access Info</name>
     <vendor email="m.bukowiecki0407@gmail.com" url="https://github.com/marcin-bukowiecki">Marcin Bukowiecki</vendor>
     
-    <idea-version since-build="202.6397.94"/>
+    <idea-version since-build="203.8084.24"/>
 
     <description><![CDATA[
         Debugging plugins extended with Thread access information according to Intellij Platform SDK threading rules.
